@@ -4,14 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Client extends Model
 {
     protected $fillable = ['name', 'email', 'gender', 'image'];
 
-    public function skills()
+    public function skills(): BelongsToMany
     {
-        $this->belongsToMany(
+        return $this->belongsToMany(
             Skill::class,
             'client_skill',
             'client_id',

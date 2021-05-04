@@ -1845,6 +1845,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+/* harmony import */ var _helpers_Helpers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../helpers/Helpers */ "./resources/js/helpers/Helpers.js");
 //
 //
 //
@@ -1888,17 +1889,74 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "Registration",
   data: function data() {
     return {
-      errors: [],
-      basicInfo: {}
+      errors: {},
+      basicInfo: {},
+      image: '',
+      gender: 'male',
+      allSkills: [],
+      skills: []
     };
   },
+  created: function created() {
+    this.getSkills();
+  },
   methods: {
+    getSkills: function getSkills() {
+      var _this = this;
+
+      axios.get('/skills').then(function (response) {
+        _this.allSkills = response.data;
+      })["catch"](function (error) {});
+    },
     submit: function submit() {
-      console.log('called');
+      var _this2 = this;
+
+      var formData = {
+        name: this.basicInfo.name,
+        email: this.basicInfo.email,
+        gender: this.gender,
+        skills: this.skills,
+        image: this.image
+      },
+          data = (0,_helpers_Helpers__WEBPACK_IMPORTED_MODULE_0__.formDataAssigner)(new FormData(), formData);
+      axios.post('/store/information', data).then(function (response) {
+        console.log(response);
+      })["catch"](function (error) {
+        _this2.errors = error.response.data.errors;
+      });
+    },
+    onImageChange: function onImageChange(event) {
+      this.image = event.target.files[0];
     }
   }
 });
@@ -1962,6 +2020,40 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 //     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
 //     forceTLS: true
 // });
+
+/***/ }),
+
+/***/ "./resources/js/helpers/Helpers.js":
+/*!*****************************************!*\
+  !*** ./resources/js/helpers/Helpers.js ***!
+  \*****************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "formDataAssigner": () => (/* binding */ formDataAssigner)
+/* harmony export */ });
+var formDataAssigner = function formDataAssigner() {
+  var formData = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : new FormData();
+  var dataObject = arguments.length > 1 ? arguments[1] : undefined;
+  Object.keys(dataObject).map(function (key) {
+    if (dataObject[key] && !dataObject[key].length > 0 && Object.keys(dataObject[key]).length > 0) {
+      Object.keys(dataObject[key]).map(function (childKey) {
+        return formData.append(key + "[".concat(childKey, "]"), dataObject[key][childKey]);
+      });
+    } else if (Array.isArray(dataObject[key])) {
+      dataObject[key].map(function (el, index) {
+        Object.keys(el).map(function (objectKeys) {
+          formData.append(key + "[".concat(index, "][").concat(objectKeys, "]"), el[objectKeys]);
+        });
+      });
+    } else {
+      return formData.append(key, dataObject[key]);
+    }
+  });
+  return formData;
+};
 
 /***/ }),
 
@@ -37440,25 +37532,11 @@ var render = function() {
     _c("div", { staticClass: "mt-5" }, [
       _c("div", { staticClass: "card" }, [
         _c("div", { staticClass: "card-header text-center" }, [
-          _vm._v("Basic Info")
+          _vm._v("Information")
         ]),
         _vm._v(" "),
         _c("div", { staticClass: "card-body" }, [
           _c("form", [
-            _vm.errors.length
-              ? _c("div", { staticClass: "mb-2" }, [
-                  _c("b", [_vm._v("Please correct the following error(s):")]),
-                  _vm._v(" "),
-                  _c(
-                    "ul",
-                    _vm._l(_vm.errors, function(error) {
-                      return _c("li", [_vm._v(_vm._s(error))])
-                    }),
-                    0
-                  )
-                ])
-              : _vm._e(),
-            _vm._v(" "),
             _c("div", { staticClass: "form-group row align-items-center" }, [
               _c("label", { staticClass: "col-sm-2 mb-0" }, [_vm._v("Name")]),
               _vm._v(" "),
@@ -37473,7 +37551,7 @@ var render = function() {
                     }
                   ],
                   staticClass: "form-control",
-                  attrs: { type: "text", required: "" },
+                  attrs: { type: "text" },
                   domProps: { value: _vm.basicInfo.name },
                   on: {
                     input: function($event) {
@@ -37483,7 +37561,13 @@ var render = function() {
                       _vm.$set(_vm.basicInfo, "name", $event.target.value)
                     }
                   }
-                })
+                }),
+                _vm._v(" "),
+                _vm.errors.name
+                  ? _c("small", { staticClass: "text-danger" }, [
+                      _vm._v(_vm._s(_vm.errors.name[0]))
+                    ])
+                  : _vm._e()
               ])
             ]),
             _vm._v(" "),
@@ -37501,7 +37585,7 @@ var render = function() {
                     }
                   ],
                   staticClass: "form-control",
-                  attrs: { type: "email", required: "" },
+                  attrs: { type: "email" },
                   domProps: { value: _vm.basicInfo.email },
                   on: {
                     input: function($event) {
@@ -37511,35 +37595,161 @@ var render = function() {
                       _vm.$set(_vm.basicInfo, "email", $event.target.value)
                     }
                   }
-                })
+                }),
+                _vm._v(" "),
+                _vm.errors.email
+                  ? _c("small", { staticClass: "text-danger" }, [
+                      _vm._v(_vm._s(_vm.errors.email[0]))
+                    ])
+                  : _vm._e()
               ])
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "form-group row align-items-center" }, [
-              _c("label", { staticClass: "col-sm-2 mb-0" }, [_vm._v("Phone")]),
+              _c("label", { staticClass: "col-sm-2 mb-0" }, [_vm._v("Image")]),
               _vm._v(" "),
               _c("div", { staticClass: "col-sm-10" }, [
                 _c("input", {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.basicInfo.phone,
-                      expression: "basicInfo.phone"
-                    }
-                  ],
-                  staticClass: "form-control",
-                  attrs: { type: "text", required: "" },
-                  domProps: { value: _vm.basicInfo.phone },
-                  on: {
-                    input: function($event) {
-                      if ($event.target.composing) {
-                        return
+                  staticClass: "form-control-file",
+                  attrs: { type: "file", accept: "image/*" },
+                  on: { change: _vm.onImageChange }
+                }),
+                _vm._v(" "),
+                _vm.errors.image
+                  ? _c("small", { staticClass: "text-danger" }, [
+                      _vm._v(_vm._s(_vm.errors.image[0]))
+                    ])
+                  : _vm._e()
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "form-group row align-items-center" }, [
+              _c("label", { staticClass: "col-sm-2 mb-0" }, [_vm._v("Gender")]),
+              _vm._v(" "),
+              _c("div", { staticClass: "col-sm-10" }, [
+                _c("div", { staticClass: "form-check form-check-inline" }, [
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.gender,
+                        expression: "gender"
                       }
-                      _vm.$set(_vm.basicInfo, "phone", $event.target.value)
+                    ],
+                    staticClass: "form-check-input",
+                    attrs: { type: "radio", value: "male" },
+                    domProps: { checked: _vm._q(_vm.gender, "male") },
+                    on: {
+                      change: function($event) {
+                        _vm.gender = "male"
+                      }
                     }
-                  }
-                })
+                  }),
+                  _vm._v(" "),
+                  _c("label", { staticClass: "form-check-label" }, [
+                    _vm._v("Male")
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-check form-check-inline" }, [
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.gender,
+                        expression: "gender"
+                      }
+                    ],
+                    staticClass: "form-check-input",
+                    attrs: { type: "radio", value: "female" },
+                    domProps: { checked: _vm._q(_vm.gender, "female") },
+                    on: {
+                      change: function($event) {
+                        _vm.gender = "female"
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("label", { staticClass: "form-check-label" }, [
+                    _vm._v("Female")
+                  ])
+                ]),
+                _vm._v(" "),
+                _vm.errors.gender
+                  ? _c("small", { staticClass: "text-danger" }, [
+                      _vm._v(_vm._s(_vm.errors.gender[0]))
+                    ])
+                  : _vm._e()
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "form-group row align-items-center" }, [
+              _c("label", { staticClass: "col-sm-2 mb-0" }, [_vm._v("Skills")]),
+              _vm._v(" "),
+              _c("div", { staticClass: "col-sm-10" }, [
+                _c(
+                  "div",
+                  { staticClass: "row" },
+                  [
+                    _vm._l(_vm.allSkills, function(skill, index) {
+                      return _c(
+                        "div",
+                        { key: index, staticClass: "col-sm-6" },
+                        [
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.skills,
+                                expression: "skills"
+                              }
+                            ],
+                            attrs: { type: "checkbox", name: "skill" },
+                            domProps: {
+                              value: skill.id,
+                              checked: Array.isArray(_vm.skills)
+                                ? _vm._i(_vm.skills, skill.id) > -1
+                                : _vm.skills
+                            },
+                            on: {
+                              change: function($event) {
+                                var $$a = _vm.skills,
+                                  $$el = $event.target,
+                                  $$c = $$el.checked ? true : false
+                                if (Array.isArray($$a)) {
+                                  var $$v = skill.id,
+                                    $$i = _vm._i($$a, $$v)
+                                  if ($$el.checked) {
+                                    $$i < 0 && (_vm.skills = $$a.concat([$$v]))
+                                  } else {
+                                    $$i > -1 &&
+                                      (_vm.skills = $$a
+                                        .slice(0, $$i)
+                                        .concat($$a.slice($$i + 1)))
+                                  }
+                                } else {
+                                  _vm.skills = $$c
+                                }
+                              }
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c("label", [_vm._v(_vm._s(skill.name))])
+                        ]
+                      )
+                    }),
+                    _vm._v(" "),
+                    _vm.errors.skills
+                      ? _c("small", { staticClass: "text-danger" }, [
+                          _vm._v(_vm._s(_vm.errors.skills[0]))
+                        ])
+                      : _vm._e()
+                  ],
+                  2
+                )
               ])
             ])
           ]),
