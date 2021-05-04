@@ -7,5 +7,16 @@ use Illuminate\Database\Eloquent\Model;
 
 class Skill extends Model
 {
-    use HasFactory;
+    protected $fillable = ['name'];
+
+    public function Clients()
+    {
+        $this->belongsToMany(
+            Client::class,
+            'client_skill',
+            'skill_id',
+            'client_id',
+        );
+    }
+
 }
