@@ -19,6 +19,7 @@ class CreateClientsTable extends Migration
             $table->string('email');
             $table->string('gender');
             $table->string('image')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

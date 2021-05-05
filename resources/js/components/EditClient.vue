@@ -98,7 +98,6 @@ export default {
                 }).catch(error => {})
         },
         update() {
-            console.log(this.client.id)
             let formData = {
                     name : this.basicInfo.name,
                     email : this.basicInfo.email,
@@ -107,6 +106,7 @@ export default {
                 },
                 data = formDataAssigner(new FormData, formData);
             data.append('skills', this.skills)
+            data.append('_method', 'patch')
 
             axios.post('/update/client/'+ this.client.id, data)
                 .then(response => {

@@ -104,6 +104,8 @@ export default {
             axios.post('/store/information', data)
             .then(response => {
                 console.log(response);
+
+                location.reload();
             }).catch(error => {
                 this.errors = error.response.data.errors;
             });

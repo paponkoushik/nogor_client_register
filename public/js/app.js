@@ -1896,6 +1896,14 @@ __webpack_require__.r(__webpack_exports__);
         var data = _ref.data;
         _this.clients = data;
       })["catch"](function (error) {});
+    },
+    deleteClient: function deleteClient(id) {
+      axios["delete"]('/delete/' + id).then(function (response) {
+        console.log(response);
+        location.reload();
+      })["catch"](function (error) {
+        console.log(error);
+      });
     }
   }
 });
@@ -2014,7 +2022,6 @@ __webpack_require__.r(__webpack_exports__);
     update: function update() {
       var _this2 = this;
 
-      console.log(this.client.id);
       var formData = {
         name: this.basicInfo.name,
         email: this.basicInfo.email,
@@ -2023,6 +2030,7 @@ __webpack_require__.r(__webpack_exports__);
       },
           data = (0,_helpers_Helpers__WEBPACK_IMPORTED_MODULE_0__.formDataAssigner)(new FormData(), formData);
       data.append('skills', this.skills);
+      data.append('_method', 'patch');
       axios.post('/update/client/' + this.client.id, data).then(function (response) {
         console.log(response);
       })["catch"](function (error) {
@@ -2187,6 +2195,7 @@ __webpack_require__.r(__webpack_exports__);
       data.append('skills', this.skills);
       axios.post('/store/information', data).then(function (response) {
         console.log(response);
+        location.reload();
       })["catch"](function (error) {
         _this2.errors = error.response.data.errors;
       });
@@ -38031,7 +38040,15 @@ var render = function() {
                         _vm._v(" "),
                         _c(
                           "button",
-                          { staticClass: "btn btn-outline-danger" },
+                          {
+                            staticClass: "btn btn-outline-danger",
+                            on: {
+                              click: function($event) {
+                                $event.preventDefault()
+                                return _vm.deleteClient(client.id)
+                              }
+                            }
+                          },
                           [_vm._v("Delete")]
                         )
                       ])

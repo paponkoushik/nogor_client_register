@@ -21,7 +21,8 @@ class RegistrationController extends Controller
 
     public function index()
     {
-        return Client::query()->with('skills')->get();
+        cache()->forget('clients');
+        return cache()->rememberForever("clients", fn() => Client::query()->with('skills')->get());
     }
 
     public function show(Client $client)
@@ -51,5 +52,12 @@ class RegistrationController extends Controller
         );
 
         return response()->json(['message' => 'Data has been stored successfully']);
+    }
+
+    public function delete(Client $client): JsonResponse
+    {
+        $client->delete();
+
+        return response()->json(['message' => 'data has been deleted successfully']);
     }
 }

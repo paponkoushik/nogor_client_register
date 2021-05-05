@@ -21,7 +21,8 @@ Route::get('/', function () {
 
 Route::get('/clients', [RegistrationController::class, 'index']);
 Route::get('/client/{client}', [RegistrationController::class, 'show']);
-Route::post('/update/client/{client}', [RegistrationController::class, 'update']);
+Route::patch('/update/client/{client}', [RegistrationController::class, 'update']);
 Route::post('/store/information', [RegistrationController::class, 'store']);
+Route::delete('/delete/{client}', [RegistrationController::class, 'delete']);
 Route::get('/skills', [SkillController::class, 'index']);
 
