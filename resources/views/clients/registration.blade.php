@@ -1,5 +1,5 @@
 @extends('master')
 
 @section('content')
-    <registration></registration>
+    <index></index>
 @endsection

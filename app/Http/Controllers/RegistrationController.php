@@ -24,12 +24,29 @@ class RegistrationController extends Controller
         return Client::query()->with('skills')->get();
     }
 
+    public function show(Client $client)
+    {
+        return view('clients.edit_client', ['client' => $client->load('skills')]);
+    }
+
     public function store(Request $request): JsonResponse
     {
         DB::transaction(fn()=> $this->service
             ->setAttrs($request->all())
             ->validate()
             ->store()
+            ->syncSkills()
+        );
+
+        return response()->json(['message' => 'Data has been stored successfully']);
+    }
+
+    public function update(Request $request, Client $client): JsonResponse
+    {
+        DB::transaction(fn()=> $this->service
+            ->setAttrs($request->only('name','email', 'gender', 'skills'))
+            ->validate()
+            ->update($client)
             ->syncSkills()
         );
 

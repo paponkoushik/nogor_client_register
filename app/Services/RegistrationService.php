@@ -23,11 +23,30 @@ class RegistrationService
             'email' => 'required|email',
             'image' => 'required|mimes:jpeg,jpg,png,gif|max:2000',
             'gender' => 'required|in:male,female',
-            'skills' => 'nullable|array',
+            'skills' => 'required',
+        ];
+    }
+
+    public function updateRules(): array
+    {
+        return [
+            'name' => 'required',
+            'email' => 'required|email',
+            'image' => 'nullable|mimes:jpeg,jpg,png,gif|max:2000',
+            'gender' => 'required|in:male,female',
+            'skills' => 'required',
         ];
     }
 
     public function validate(): RegistrationService
+    {
+        validator(request()->all(), $this->updateRules())
+            ->validate();
+
+        return $this;
+    }
+
+    public function validateUpdate(): RegistrationService
     {
         validator(request()->all(), $this->rules())
             ->validate();
@@ -45,12 +64,22 @@ class RegistrationService
 
         return $this;
     }
+    public function update($model): RegistrationService
+    {
+        if ($this->getAttribute('image')) $this->uploadFile();
+
+        $this->model = $model;
+
+        $this->model->fill($this->getAttrs())->save();
+
+        return $this;
+    }
 
     public function syncSkills(): RegistrationService
     {
         $this->model
             ->skills()
-            ->sync($this->getAttribute('skills'));
+            ->sync(array_values(explode(",", $this->getAttribute('skills'))));
 
         return $this;
     }

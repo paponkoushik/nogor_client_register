@@ -96,10 +96,10 @@ export default {
                 name : this.basicInfo.name,
                 email : this.basicInfo.email,
                 gender : this.gender,
-                skills : this.skills,
-                image: this.image,
+                image : this.image,
             },
             data = formDataAssigner(new FormData, formData);
+            data.append('skills', this.skills)
 
             axios.post('/store/information', data)
             .then(response => {
