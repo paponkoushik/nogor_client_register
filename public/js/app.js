@@ -1878,11 +1878,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "AllClients",
   data: function data() {
     return {
-      clients: []
+      clients: [],
+      alert: ''
     };
   },
   created: function created() {
@@ -1898,12 +1902,16 @@ __webpack_require__.r(__webpack_exports__);
       })["catch"](function (error) {});
     },
     deleteClient: function deleteClient(id) {
-      axios["delete"]('/delete/' + id).then(function (response) {
-        console.log(response);
-        location.reload();
-      })["catch"](function (error) {
-        console.log(error);
-      });
+      var _this2 = this;
+
+      axios["delete"]('/delete/' + id).then(function (_ref2) {
+        var data = _ref2.data;
+        _this2.alert = data.message;
+        setTimeout(function () {
+          _this2.alert = '';
+          location.reload();
+        }, 2500);
+      })["catch"](function (error) {});
     }
   }
 });
@@ -1990,6 +1998,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "EditClient",
@@ -2003,11 +2014,11 @@ __webpack_require__.r(__webpack_exports__);
       image: '',
       gender: '',
       allSkills: [],
-      skills: []
+      skills: [],
+      alert: ''
     };
   },
   created: function created() {
-    console.log(this.client);
     this.setData();
     this.getSkills();
   },
@@ -2031,8 +2042,13 @@ __webpack_require__.r(__webpack_exports__);
           data = (0,_helpers_Helpers__WEBPACK_IMPORTED_MODULE_0__.formDataAssigner)(new FormData(), formData);
       data.append('skills', this.skills);
       data.append('_method', 'patch');
-      axios.post('/update/client/' + this.client.id, data).then(function (response) {
-        console.log(response);
+      axios.post('/update/client/' + this.client.id, data).then(function (_ref) {
+        var data = _ref.data;
+        _this2.alert = data.message;
+        setTimeout(function () {
+          _this2.alert = '';
+          window.location.replace('/');
+        }, 2500);
       })["catch"](function (error) {
         _this2.errors = error.response.data.errors;
       });
@@ -2158,6 +2174,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "Registration",
@@ -2168,7 +2187,8 @@ __webpack_require__.r(__webpack_exports__);
       image: '',
       gender: 'male',
       allSkills: [],
-      skills: []
+      skills: [],
+      alert: ''
     };
   },
   created: function created() {
@@ -2193,9 +2213,13 @@ __webpack_require__.r(__webpack_exports__);
       },
           data = (0,_helpers_Helpers__WEBPACK_IMPORTED_MODULE_0__.formDataAssigner)(new FormData(), formData);
       data.append('skills', this.skills);
-      axios.post('/store/information', data).then(function (response) {
-        console.log(response);
-        location.reload();
+      axios.post('/store/information', data).then(function (_ref) {
+        var data = _ref.data;
+        _this2.alert = data.message;
+        setTimeout(function () {
+          _this2.alert = '';
+          location.reload();
+        }, 2500);
       })["catch"](function (error) {
         _this2.errors = error.response.data.errors;
       });
@@ -38000,6 +38024,23 @@ var render = function() {
         ]),
         _vm._v(" "),
         _c("div", { staticClass: "card-body" }, [
+          _vm.alert
+            ? _c(
+                "div",
+                {
+                  staticClass: "alert alert-success",
+                  attrs: { role: "alert" }
+                },
+                [
+                  _vm._v(
+                    "\n                    " +
+                      _vm._s(_vm.alert) +
+                      "\n                "
+                  )
+                ]
+              )
+            : _vm._e(),
+          _vm._v(" "),
           _c("table", { staticClass: "table" }, [
             _vm._m(0),
             _vm._v(" "),
@@ -38111,6 +38152,23 @@ var render = function() {
         ]),
         _vm._v(" "),
         _c("div", { staticClass: "card-body" }, [
+          _vm.alert
+            ? _c(
+                "div",
+                {
+                  staticClass: "alert alert-success",
+                  attrs: { role: "alert" }
+                },
+                [
+                  _vm._v(
+                    "\n                    " +
+                      _vm._s(_vm.alert) +
+                      "\n                "
+                  )
+                ]
+              )
+            : _vm._e(),
+          _vm._v(" "),
           _c("form", [
             _c("div", { staticClass: "form-group row align-items-center" }, [
               _c("label", { staticClass: "col-sm-2 mb-0" }, [_vm._v("Name")]),
@@ -38409,6 +38467,23 @@ var render = function() {
         ]),
         _vm._v(" "),
         _c("div", { staticClass: "card-body" }, [
+          _vm.alert
+            ? _c(
+                "div",
+                {
+                  staticClass: "alert alert-success",
+                  attrs: { role: "alert" }
+                },
+                [
+                  _vm._v(
+                    "\n                    " +
+                      _vm._s(_vm.alert) +
+                      "\n                "
+                  )
+                ]
+              )
+            : _vm._e(),
+          _vm._v(" "),
           _c("form", [
             _c("div", { staticClass: "form-group row align-items-center" }, [
               _c("label", { staticClass: "col-sm-2 mb-0" }, [_vm._v("Name")]),

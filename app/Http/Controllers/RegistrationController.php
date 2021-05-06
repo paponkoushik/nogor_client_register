@@ -21,7 +21,6 @@ class RegistrationController extends Controller
 
     public function index()
     {
-        cache()->forget('clients');
         return cache()->rememberForever("clients", fn() => Client::query()->with('skills')->get());
     }
 

@@ -11,6 +11,6 @@ class SkillController
 {
     public function index()
     {
-        return Skill::query()->get();
+        return cache()->rememberForever('skills', fn() => Skill::query()->get());
     }
 }

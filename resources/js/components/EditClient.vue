@@ -4,6 +4,9 @@
             <div class="card">
                 <div class="card-header text-center">Information</div>
                 <div class="card-body">
+                    <div class="alert alert-success" role="alert" v-if="alert">
+                        {{alert}}
+                    </div>
                     <form>
                         <div class="form-group row align-items-center">
                             <label class="col-sm-2 mb-0">Name</label>
@@ -82,11 +85,11 @@ export default {
             gender: '',
             allSkills: [],
             skills: [],
+            alert: '',
         }
     },
 
     created() {
-        console.log(this.client)
         this.setData();
         this.getSkills();
     },
@@ -109,8 +112,14 @@ export default {
             data.append('_method', 'patch')
 
             axios.post('/update/client/'+ this.client.id, data)
-                .then(response => {
-                    console.log(response);
+                .then(({data}) => {
+                    this.alert = data.message;
+
+                    setTimeout(() => {
+                        this.alert = '';
+                        window.location.replace('/');
+                    }, 2500);
+
                 }).catch(error => {
                 this.errors = error.response.data.errors;
             });

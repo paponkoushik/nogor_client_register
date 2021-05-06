@@ -20,11 +20,12 @@ class SkillSeeder extends Seeder
     public function demoData(): array
     {
         return [
-            ['name'=> 'PHP'],
-            ['name'=> 'Vue js'],
             ['name'=> 'Laravel'],
-            ['name'=> 'Django'],
-            ['name'=> 'Python'],
+            ['name'=> 'CodeIgniter'],
+            ['name'=> 'Vue js'],
+            ['name'=> 'Ajax'],
+            ['name'=> 'MySql'],
+            ['name'=> 'API'],
         ];
     }
 }

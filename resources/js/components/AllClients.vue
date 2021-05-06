@@ -4,6 +4,9 @@
             <div class="card">
                 <div class="card-header text-center">Clients</div>
                 <div class="card-body">
+                    <div class="alert alert-success" role="alert" v-if="alert">
+                        {{alert}}
+                    </div>
                     <table class="table">
                         <thead>
                         <tr>
@@ -37,6 +40,7 @@ export default {
     data() {
         return {
             clients: [],
+            alert: '',
         }
     },
     created() {
@@ -53,12 +57,14 @@ export default {
         },
         deleteClient(id) {
             axios.delete('/delete/' + id)
-                .then(response => {
-                    console.log(response);
-                    location.reload();
+                .then(({data}) => {
+                    this.alert = data.message;
+                    setTimeout(() => {
+                        this.alert = '';
+                        location.reload();
+                    }, 2500);
                 })
                 .catch(error => {
-                    console.log(error);
                 });
         }
     }
